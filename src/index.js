@@ -1,13 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import 'bootstrap/dist/css/bootstrap.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.css';
+import {configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
+import rootReducer from "./state/root.reducer";
+import {Provider} from "react-redux";
+
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: getDefaultMiddleware({
+    ignoredActions: [
+        'web3/web3Connected'
+    ],
+    ignoredActionPaths: [
+        'payload.connection'
+    ],
+    ignoredPaths: [
+        'web3.connection'
+    ]
+  })
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
