@@ -1,22 +1,47 @@
 import Exchange from '../abis/Exchange.json';
+import {exchangeSlice} from "../state/exchange.slice";
+import {slice as cancelledSlice} from "../state/cancelled-orders.slice";
+import {slice as filledSlice} from "../state/filled-orders.slice";
 
 let _contract;
 let _web3;
 let _abiData;
+let _dispatch
 
-export const loadContract = async (web3) => {
+const { exchangeContractLoaded } = exchangeSlice.actions;
+const { orderCancelled } = cancelledSlice.actions;
+const { orderFilled } = filledSlice.actions;
+
+export const loadContract = async (web3, dispatch) => {
   _web3 = web3
+  _dispatch = dispatch
+
   const {Contract, net} = _web3.eth;
   const networkId = await net.getId();
   _abiData = Exchange.networks[networkId];
 
   try {
     _contract = new Contract(Exchange.abi, _abiData.address);
-    return _contract;
+    _dispatch(exchangeContractLoaded({loaded: true}));
   } catch (error) {
     throw error
   }
 
+}
+
+export const cancelOrder = async ({order, account}) => {
+  await _contract.methods.cancelOrder(order.id).send({from: account})
+    .on('transactionHash', (hash) => {
+      _dispatch(orderCancelled({order}))
+    })
+  return {order};
+}
+
+export const fillOrder = async ({order, account}) => {
+  await _contract.methods.fillOrder(order.id).send({from: account})
+    .on('transactionHash', (hash) => {
+      _dispatch(orderFilled({order}));
+    })
 }
 
 export const fetchCancelledOrders = async () => {

@@ -1,18 +1,30 @@
 import Web3 from 'web3';
+import {web3Slice} from '../state/web3.slice';
 
-let web3;
+const {
+  web3Connected,
+  web3AccountLoaded,
+  web3NetworkLoaded
+} = web3Slice.actions;
 
-export const loadWeb3 = async () => {
-  web3 = new Web3(window.ethereum);
-  return web3;
+let _web3;
+let _dispatch;
+
+export const loadWeb3 = async (dispatch) => {
+  _web3 = new Web3(window.ethereum);
+  _dispatch = dispatch;
+  _dispatch(web3Connected({connected: true}))
+  return _web3;
 }
 
 export const loadAccounts = async () => {
-  const {getAccounts} = web3.eth;
-  return await getAccounts();
+  const {getAccounts} = _web3.eth;
+  const [account] = await getAccounts();
+  _dispatch(web3AccountLoaded({account}));
 }
 
 export const loadNetwork = async () => {
-  const {net} = web3.eth;
-  await net.getId();
+  const {net} = _web3.eth;
+  const networkId = await net.getId();
+  _dispatch(web3NetworkLoaded({networkId}));
 }

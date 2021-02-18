@@ -33,7 +33,7 @@ export const selectDecoratedOpenOrders = createSelector(
       ...o,
       orderType,
       orderTypeClass: (orderType === 'buy' ? GREEN : RED),
-      orderFillClass: (orderType === 'buy' ? 'sell' : 'buy')
+      orderFillAction: (orderType === 'buy' ? 'sell' : 'buy')
     })
   })
 )

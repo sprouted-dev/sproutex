@@ -8,12 +8,11 @@ import { fetchAllOrders } from '../services/exchange.service';
 import {createSelector} from "reselect";
 
 export const ORDER_SLICE_KEY = 'orders';
+export const orderAdapter = createEntityAdapter();
 
 export const fetchOrders = createAsyncThunk("orders/fetchAll", async () => {
   return await fetchAllOrders();
 })
-
-export const orderAdapter = createEntityAdapter();
 
 const initialState = orderAdapter.getInitialState({loading: false});
 
@@ -29,7 +28,7 @@ export const slice = createSlice({
     builder.addCase(fetchOrders.fulfilled, (state, action) => {
       orderAdapter.upsertMany(state, action.payload.orders);
       state.loading = false;
-    })
+    });
   }
 })
 
@@ -45,6 +44,7 @@ export const {
 } = orderAdapter.getSelectors(state => state[ORDER_SLICE_KEY]);
 
 export const selectAllOrdersState = state => state[ORDER_SLICE_KEY];
+
 export const selectAllOrdersLoading = createSelector(
   selectAllOrdersState,
   state => state.loading

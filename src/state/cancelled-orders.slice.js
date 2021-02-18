@@ -4,13 +4,17 @@ import {
   createEntityAdapter
 } from '@reduxjs/toolkit';
 
-import {fetchCancelledOrders as fetchOrders} from '../services/exchange.service';
+import {fetchCancelledOrders as fetchOrders, cancelOrder as cancelExchangeOrder} from '../services/exchange.service';
 import {createSelector} from "reselect";
 
 export const CANCELLED_ORDER_SLICE_KEY = 'cancelledOrders';
 
 export const fetchCancelledOrders = createAsyncThunk("orders/fetchCancelled", async () => {
   return await fetchOrders();
+})
+
+export const cancelOrder = createAsyncThunk("orders/cancel", async ({ order, account }) => {
+  return await cancelExchangeOrder({ order, account })
 })
 
 export const orderAdapter = createEntityAdapter();
@@ -21,6 +25,11 @@ export const slice = createSlice({
   name: CANCELLED_ORDER_SLICE_KEY,
   initialState,
   reducers: {
+    orderCancelled: (state, action) => {
+      const {order} = action.payload;
+      orderAdapter.addOne(state, order);
+      state.cancelOrderPending = false;
+    }
   },
   extraReducers: builder => {
     builder.addCase(fetchCancelledOrders.pending, (state, action) => {
@@ -29,6 +38,13 @@ export const slice = createSlice({
     builder.addCase(fetchCancelledOrders.fulfilled, (state, action) => {
       orderAdapter.upsertMany(state, action.payload.orders);
       state.loading = false;
+    })
+    builder.addCase(cancelOrder.pending, (state, action) => {
+      state.cancelOrderPending = true;
+    });
+    builder.addCase(cancelOrder.rejected, (state, action) => {
+      state.cancelOrderPending = false;
+      state.cancelOrderError = action.error
     })
   }
 })
@@ -49,4 +65,10 @@ export const selectCancelledOrderState = state => state[CANCELLED_ORDER_SLICE_KE
 export const selectCancelledOrdersLoading = createSelector(
   selectCancelledOrderState,
   state => state.loading
+)
+
+
+export const selectCancelOrderPending = createSelector(
+  selectCancelledOrderState,
+  state => state.cancelOrderPending
 )

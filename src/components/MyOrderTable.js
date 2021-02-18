@@ -1,7 +1,13 @@
 import React from "react";
 import Spinner from "./Spinner";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faTimesCircle} from '@fortawesome/free-solid-svg-icons';
 
-const MyOrderTable = ({orders, loading}) => {
+const MyOrderTable = ({orders, loading, cancelOrder}) => {
+
+  const handleCancelClick = (order) => {
+    cancelOrder({order})
+  }
 
   return loading ? (
     <Spinner />
@@ -19,7 +25,10 @@ const MyOrderTable = ({orders, loading}) => {
         <tr key={order.id} className={`order-${order.id}`}>
           <td className={`text-${order.orderTypeClass}`}>{order.sproutAmount}</td>
           <td className={`text-${order.orderTypeClass}`}>{order.tokenPrice}</td>
-          <td className="text-muted">x</td>
+          <td className="text-muted cancel-order">
+            <FontAwesomeIcon icon={faTimesCircle}
+                             onClick={(e) => handleCancelClick(order)} />
+          </td>
         </tr>
       ))}
       </tbody>

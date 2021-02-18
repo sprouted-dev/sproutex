@@ -2,10 +2,13 @@ import React from "react";
 import SproutedLogo from "./SproutedLogo";
 import {selectExchangeName} from "../state/root.reducer";
 import Identicon from 'identicon.js';
-import {connect} from "react-redux";
+import {useSelector} from "react-redux";
 import {selectWeb3Account} from "../state/web3.slice";
 
-const Navbar = ({ exchangeName, account }) => {
+const Navbar = () => {
+
+  const exchangeName = useSelector(selectExchangeName);
+  const account = useSelector(selectWeb3Account);
 
   return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -40,8 +43,4 @@ const Navbar = ({ exchangeName, account }) => {
   )
 }
 
-const mapStateToProps = state => ({
-  exchangeName: selectExchangeName(state),
-  account: selectWeb3Account(state)
-})
-export default connect(mapStateToProps)(Navbar);
+export default Navbar;

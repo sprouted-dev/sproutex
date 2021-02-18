@@ -5,8 +5,7 @@ export const SLICE_KEY = 'web3';
 
 const initialState = {
   connected: false,
-  account: null,
-  networkId: ''
+  account: null
 };
 
 const web3Connected = (state, action) => {
