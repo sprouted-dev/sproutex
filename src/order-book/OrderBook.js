@@ -1,10 +1,10 @@
 import React from "react";
-import Spinner from "./Spinner";
+import Spinner from "../components/Spinner";
 import {useDispatch, useSelector} from "react-redux";
-import {selectGroupedOrderBook, selectOrderBookLoaded} from "../state/order-book.selectors";
+import {selectGroupedOrderBook, selectOrderBookLoaded} from "./order-book.selectors";
 import OrderTable from "./OrderTable";
 import {selectWeb3Account} from "../state/web3.slice";
-import {fillOrder, selectFillOrderPending} from "../state/filled-orders.slice";
+import {fillOrder, selectFillOrderPending} from "../trades/filled-orders.slice";
 
 const OrderBook = () => {
   const loaded = useSelector(selectOrderBookLoaded);

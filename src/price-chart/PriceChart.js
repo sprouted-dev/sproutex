@@ -2,8 +2,8 @@ import React from "react";
 import Chart from "react-apexcharts";
 import {chartOptions} from "./PriceChartConfig";
 import {useSelector} from "react-redux";
-import {selectPriceChart, selectPriceChartLoading} from "../state/price-chart.selectors";
-import Spinner from "./Spinner";
+import {selectPriceChart, selectPriceChartLoading} from "./price-chart.selectors";
+import Spinner from "../components/Spinner";
 
 const PriceChart = () => {
 

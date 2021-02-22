@@ -34,3 +34,5 @@ export const maxBy = (items, fn) =>
 
 export const minBy = (items, fn) =>
   Math.min(...items.map(typeof fn === 'function' ? fn : val => val[fn]));
+
+export const formatBalance = (balance) => Math.round(ether(balance) * 100)/100

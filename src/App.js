@@ -3,9 +3,9 @@ import Navbar from "./components/Navbar";
 import {useDispatch, useSelector} from "react-redux";
 import Main from "./components/Main";
 import PageLoading from "./components/PageLoading";
-import {loadAccounts, loadWeb3} from "./services/web3.service";
-import {loadContract as loadSprout} from "./services/sprout.service";
-import {loadContract as loadExchange} from "./services/exchange.service";
+import {loadAccounts, loadWeb3} from "./api/web3.service";
+import {loadContract as loadSprout} from "./api/sprout.service";
+import {loadContract as loadExchange} from "./api/exchange.service";
 import {selectAppLoaded} from "./state/root.reducer";
 
 const App = () => {
@@ -18,8 +18,8 @@ const App = () => {
       try {
         const web3 = await loadWeb3(dispatch);
         await loadAccounts();
-        await loadSprout(web3, dispatch);
-        await loadExchange(web3, dispatch);
+        const sprout = await loadSprout(web3, dispatch);
+        await loadExchange(web3, dispatch, sprout);
       } catch (e) {
         console.log(e);
       }

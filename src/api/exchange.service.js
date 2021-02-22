@@ -1,20 +1,27 @@
 import Exchange from '../abis/Exchange.json';
-import {exchangeSlice} from "../state/exchange.slice";
-import {slice as cancelledSlice} from "../state/cancelled-orders.slice";
-import {slice as filledSlice} from "../state/filled-orders.slice";
+import {
+  exchangeEtherBalanceLoaded,
+  exchangeSproutBalanceLoaded,
+  etherDeposited,
+  refreshBalances
+} from "../balance/balances.slice";
+import {
+  exchangeContractLoaded
+} from "../state/exchange.slice";
+import {orderCancelled} from "../state/cancelled-orders.slice";
+import {orderFilled} from "../trades/filled-orders.slice";
+import {ETHER_ADDRESS} from "../helpers";
 
 let _contract;
 let _web3;
 let _abiData;
-let _dispatch
+let _dispatch;
+let _sprout;
 
-const { exchangeContractLoaded } = exchangeSlice.actions;
-const { orderCancelled } = cancelledSlice.actions;
-const { orderFilled } = filledSlice.actions;
-
-export const loadContract = async (web3, dispatch) => {
+export const loadContract = async (web3, dispatch, sprout) => {
   _web3 = web3
   _dispatch = dispatch
+  _sprout = sprout
 
   const {Contract, net} = _web3.eth;
   const networkId = await net.getId();
@@ -27,6 +34,29 @@ export const loadContract = async (web3, dispatch) => {
     throw error
   }
 
+}
+
+export const getExchangeEtherBalanceForAccount = async (account) => {
+  if (_web3 && account) {
+    const exchangeEtherBalance = await _contract.methods.balanceOf(ETHER_ADDRESS, account).call();
+    _dispatch(exchangeEtherBalanceLoaded({exchangeEtherBalance}));
+  }
+}
+
+export const getExchangeSproutBalanceForAccount = async (account) => {
+  if (_web3 && account) {
+    const exchangeSproutBalance = await _contract.methods.balanceOf(_sprout.options.address, account).call();
+    _dispatch(exchangeSproutBalanceLoaded({exchangeSproutBalance}));
+  }
+}
+
+export const depositEther = async ({amount, account}) => {
+  if (_contract) {
+    const {toWei} = _web3.utils;
+    await _contract.methods.depositEther().send({ from: account, value: toWei(amount)});
+    _dispatch(etherDeposited({amount}));
+    _dispatch(refreshBalances({account}));
+  }
 }
 
 export const cancelOrder = async ({order, account}) => {

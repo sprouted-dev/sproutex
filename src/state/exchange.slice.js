@@ -7,15 +7,29 @@ const initialState = {
   loaded: false
 };
 
-const exchangeContractLoaded = (state, action) => {
-  const {loaded} = action.payload;
-  return {...state, loaded}
-};
+export const exchangeSlice = createSlice({
+  name: SLICE_KEY,
+  initialState,
+  reducers: {
+    exchangeContractLoaded: (state, action) => {
+      const {loaded} = action.payload;
+      return {...state, loaded}
+    },
+    exchangeContractFailed: (state, action) => {
+      const {error} = action.payload;
+      return {...state, error};
+    }
+  }
+})
 
-const exchangeContractFailed = (state, action) => {
-  const {error} = action.payload;
-  return {...state, error};
-}
+export const {
+  exchangeContractLoaded,
+  exchangeContractFailed
+} = exchangeSlice.actions;
+
+const reducer = exchangeSlice.reducer;
+export default reducer;
+
 
 export const selectExchangeState = state => state[SLICE_KEY];
 
@@ -28,13 +42,3 @@ export const selectExchangeError = createSelector(
     selectExchangeState,
     state => state.error
 );
-
-
-export const exchangeSlice = createSlice({
-  name: SLICE_KEY,
-  initialState,
-  reducers: {
-    exchangeContractLoaded,
-    exchangeContractFailed
-  }
-})

@@ -2,7 +2,7 @@ import React from "react";
 import {Tab, Tabs} from "react-bootstrap";
 import MyTradeTable from "./MyTradeTable";
 import {useDispatch, useSelector} from "react-redux";
-import {selectMyDecoratedTrades, selectMyOpenDecoratedOrders, selectMyOrdersLoading} from "../state/my-transactions.selectors";
+import {selectMyDecoratedTrades, selectMyOpenDecoratedOrders, selectMyOrdersLoading} from "./my-transactions.selectors";
 import MyOrderTable from "./MyOrderTable";
 import {selectWeb3Account} from "../state/web3.slice";
 import {cancelOrder, selectCancelOrderPending} from "../state/cancelled-orders.slice";

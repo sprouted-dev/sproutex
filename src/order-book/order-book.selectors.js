@@ -1,10 +1,10 @@
 import {createSelector} from "reselect";
-import {selectFilledOrderIds, selectFilledOrdersLoading} from "./filled-orders.slice";
+import {selectFilledOrderIds, selectFilledOrdersLoading} from "../trades/filled-orders.slice";
 import {
   selectCancelledOrderIds,
   selectCancelledOrdersLoading
-} from "./cancelled-orders.slice";
-import {selectAllOrders, selectAllOrdersLoading} from "./orders.slice";
+} from "../state/cancelled-orders.slice";
+import {selectAllOrders, selectAllOrdersLoading} from "../state/orders.slice";
 import {ETHER_ADDRESS, GREEN, RED} from "../helpers";
 import {decorateOrder} from "../utils/order.util";
 

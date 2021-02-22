@@ -1,5 +1,5 @@
 import {createSelector} from "reselect";
-import {selectDecoratedTrades, selectFilledOrdersLoading} from "./filled-orders.slice";
+import {selectDecoratedTrades, selectFilledOrdersLoading} from "../trades/filled-orders.slice";
 import {getStartOfPeriod, groupBy, maxBy, minBy} from "../helpers";
 export const selectPriceChartLoading = createSelector(
   selectFilledOrdersLoading,

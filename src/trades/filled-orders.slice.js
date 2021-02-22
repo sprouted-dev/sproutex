@@ -3,7 +3,7 @@ import {
   createAsyncThunk,
   createEntityAdapter
 } from '@reduxjs/toolkit';
-import {fetchFilledOrders as fetchOrders, fillOrder as fillExchangeOrder} from '../services/exchange.service';
+import {fetchFilledOrders as fetchOrders, fillOrder as fillExchangeOrder} from '../api/exchange.service';
 import {createSelector} from "reselect";
 import {GREEN, RED} from "../helpers";
 import {decorateOrder} from "../utils/order.util";
@@ -51,6 +51,10 @@ export const slice = createSlice({
 
 const reducer = slice.reducer;
 export default reducer;
+
+export const {
+  orderFilled
+} = slice.actions;
 
 export const selectFilledOrderState = state => state[FILLED_ORDER_SLICE_KEY];
 export const selectFilledOrdersLoading = createSelector(

@@ -1,8 +1,8 @@
 import {createSelector} from "reselect";
-import {selectWeb3Account} from "./web3.slice";
-import {selectDecoratedTrades, selectFilledOrdersLoading} from "./filled-orders.slice";
+import {selectWeb3Account} from "../state/web3.slice";
+import {selectDecoratedTrades, selectFilledOrdersLoading} from "../trades/filled-orders.slice";
 import {ETHER_ADDRESS, GREEN, RED} from "../helpers";
-import {selectDecoratedOpenOrders} from "./order-book.selectors";
+import {selectDecoratedOpenOrders} from "../order-book/order-book.selectors";
 
 export const selectMyOrdersLoading = createSelector(
   selectFilledOrdersLoading,

@@ -1,6 +1,6 @@
 import React from "react";
 import {useSelector} from "react-redux";
-import {selectDecoratedTrades, selectFilledOrdersLoading} from "../state/filled-orders.slice";
+import {selectDecoratedTrades, selectFilledOrdersLoading} from "./filled-orders.slice";
 import TradeTable from "./TradeTable";
 
 const Trades = () => {

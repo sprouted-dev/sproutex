@@ -1,5 +1,5 @@
 import React from "react";
-import Spinner from "./Spinner";
+import Spinner from "../components/Spinner";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTimesCircle} from '@fortawesome/free-solid-svg-icons';
 

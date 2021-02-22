@@ -4,7 +4,7 @@ import {
   createEntityAdapter
 } from '@reduxjs/toolkit';
 
-import {fetchCancelledOrders as fetchOrders, cancelOrder as cancelExchangeOrder} from '../services/exchange.service';
+import {fetchCancelledOrders as fetchOrders, cancelOrder as cancelExchangeOrder} from '../api/exchange.service';
 import {createSelector} from "reselect";
 
 export const CANCELLED_ORDER_SLICE_KEY = 'cancelledOrders';
@@ -51,6 +51,10 @@ export const slice = createSlice({
 
 const reducer = slice.reducer;
 export default reducer;
+
+export const {
+  orderCancelled
+} = slice.actions;
 
 export const {
   selectById: selectCancelledOrderById,
