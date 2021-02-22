@@ -3,9 +3,9 @@ import Navbar from "./components/Navbar";
 import {useDispatch, useSelector} from "react-redux";
 import Main from "./components/Main";
 import PageLoading from "./components/PageLoading";
-import {loadAccounts, loadWeb3} from "./api/web3.service";
-import {loadContract as loadSprout} from "./api/sprout.service";
-import {loadContract as loadExchange} from "./api/exchange.service";
+import {loadAccounts, loadWeb3} from "./api/web3.api";
+import {loadContract as loadSprout} from "./api/sprout.api";
+import {loadContract as loadExchange} from "./api/exchange.api";
 import {selectAppLoaded} from "./state/root.reducer";
 
 const App = () => {

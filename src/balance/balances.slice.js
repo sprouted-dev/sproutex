@@ -1,10 +1,15 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {depositEther as depositExchangeEther} from "../api/exchange.service";
+import {
+  depositEther as depositExchangeEther,
+  withdrawEther as withdrawExchangeEther,
+  withdrawSprouts as withdrawExchangeSprouts,
+  depositSprouts as depositExchangeSprouts,
+} from "../api/exchange.api";
 import {createSelector} from "reselect";
 import {formatBalance} from "../helpers";
-import {getEtherBalanceForAccount} from "../api/web3.service";
-import {getSproutBalanceForAccount} from "../api/sprout.service";
-import {getExchangeEtherBalanceForAccount, getExchangeSproutBalanceForAccount} from "../api/exchange.service";
+import {getEtherBalanceForAccount} from "../api/web3.api";
+import {getSproutBalanceForAccount} from "../api/sprout.api";
+import {getExchangeEtherBalanceForAccount, getExchangeSproutBalanceForAccount} from "../api/exchange.api";
 
 export const SLICE_KEY = 'balances';
 
@@ -19,6 +24,18 @@ const initialState = {
 
 export const depositEther = createAsyncThunk("exchange/depositEther", async ({amount, account}) => {
   await depositExchangeEther({amount, account});
+})
+
+export const withdrawEther = createAsyncThunk("exchange/withdrawEther", async ({amount, account}) => {
+  await withdrawExchangeEther({amount, account});
+})
+
+export const depositSprouts = createAsyncThunk("exchange/depositSprouts", async ({amount, account}) => {
+  await depositExchangeSprouts({amount, account});
+})
+
+export const withdrawSprouts = createAsyncThunk("exchange/withdrawSprouts", async ({amount, account}) => {
+  await withdrawExchangeSprouts({amount, account});
 })
 
 export const refreshBalances = createAsyncThunk("balances/refresh", async ({account}) => {
@@ -52,6 +69,15 @@ export const balanceSlice = createSlice({
     },
     etherDeposited: (state, action) => {
       state.depositEtherPending = false;
+    },
+    etherWithdrawn: (state, action) => {
+      state.withdrawEtherPending = false;
+    },
+    sproutsDeposited: (state, action) => {
+      state.depositSproutsPending = false;
+    },
+    sproutsWithdrawn: (state, action) => {
+      state.withdrawSproutsPending = false;
     }
   },
   extraReducers: builder => {
@@ -61,6 +87,27 @@ export const balanceSlice = createSlice({
     builder.addCase(depositEther.rejected, (state, action) => {
       state.depositEtherPending = false;
       state.depositEtherError = action.error
+    })
+    builder.addCase(withdrawEther.pending, (state, action) => {
+      state.withdrawEtherPending = true;
+    });
+    builder.addCase(withdrawEther.rejected, (state, action) => {
+      state.withdrawEtherPending = false;
+      state.withdrawEtherError = action.error
+    })
+    builder.addCase(depositSprouts.pending, (state, action) => {
+      state.depositSproutsPending = true;
+    });
+    builder.addCase(depositSprouts.rejected, (state, action) => {
+      state.depositSproutsPending = false;
+      state.depositSproutsError = action.error
+    })
+    builder.addCase(withdrawSprouts.pending, (state, action) => {
+      state.withdrawSproutsPending = true;
+    });
+    builder.addCase(withdrawSprouts.rejected, (state, action) => {
+      state.withdrawSproutsPending = false;
+      state.withdrawSproutsError = action.error
     })
     builder.addCase(refreshBalances.pending, (state, action) => {
       state.balanceRefreshPending = true;
@@ -80,8 +127,11 @@ export const {
   exchangeEtherBalanceLoaded,
   exchangeSproutBalanceLoaded,
   etherDeposited,
+  etherWithdrawn,
   etherBalanceLoaded,
-  sproutBalanceLoaded
+  sproutBalanceLoaded,
+  sproutsDeposited,
+  sproutsWithdrawn
 } = balanceSlice.actions;
 
 const reducer = balanceSlice.reducer;

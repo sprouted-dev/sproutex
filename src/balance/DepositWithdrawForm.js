@@ -1,13 +1,13 @@
 import React, {useState} from "react";
 import {Form} from "react-bootstrap";
 
-const DepositForm = ({depositEther}) => {
+const DepositWithdrawForm = ({saveChanges, actionLabel, actionPlaceholder}) => {
 
   const [amount, setAmount] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    depositEther({amount});
+    saveChanges({amount});
   }
 
   const handleInputChange = (e) => {
@@ -19,17 +19,17 @@ const DepositForm = ({depositEther}) => {
     <Form className="row" onSubmit={handleSubmit}>
       <div className="col-12 col-sm pr-sm-2">
         <input type="text"
-               placeholder="ETH Amount"
+               placeholder={actionPlaceholder}
                onChange={handleInputChange}
                className="form-control form-control-sm bg-dark text-white"
                required
         />
       </div>
       <div className="col-12 col-sm-auto pl-sm-0">
-        <button type="submit" className="btn btn-primary btn-block btn-sm">Deposit</button>
+        <button type="submit" className="btn btn-primary btn-block btn-sm">{actionLabel}</button>
       </div>
     </Form>
   )
 }
 
-export default DepositForm;
+export default DepositWithdrawForm;

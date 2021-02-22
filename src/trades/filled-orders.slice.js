@@ -3,7 +3,7 @@ import {
   createAsyncThunk,
   createEntityAdapter
 } from '@reduxjs/toolkit';
-import {fetchFilledOrders as fetchOrders, fillOrder as fillExchangeOrder} from '../api/exchange.service';
+import {fetchFilledOrders as fetchOrders, fillOrder as fillExchangeOrder} from '../api/exchange.api';
 import {createSelector} from "reselect";
 import {GREEN, RED} from "../helpers";
 import {decorateOrder} from "../utils/order.util";

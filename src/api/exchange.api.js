@@ -3,7 +3,10 @@ import {
   exchangeEtherBalanceLoaded,
   exchangeSproutBalanceLoaded,
   etherDeposited,
-  refreshBalances
+  sproutsDeposited,
+  sproutsWithdrawn,
+  refreshBalances,
+  etherWithdrawn
 } from "../balance/balances.slice";
 import {
   exchangeContractLoaded
@@ -29,11 +32,10 @@ export const loadContract = async (web3, dispatch, sprout) => {
 
   try {
     _contract = new Contract(Exchange.abi, _abiData.address);
-    _dispatch(exchangeContractLoaded({loaded: true}));
+    _dispatch(exchangeContractLoaded({loaded: true, address: _contract.options.address}));
   } catch (error) {
     throw error
   }
-
 }
 
 export const getExchangeEtherBalanceForAccount = async (account) => {
@@ -56,6 +58,33 @@ export const depositEther = async ({amount, account}) => {
     await _contract.methods.depositEther().send({ from: account, value: toWei(amount)});
     _dispatch(etherDeposited({amount}));
     _dispatch(refreshBalances({account}));
+  }
+}
+
+export const withdrawEther = async ({amount, account}) => {
+  if (_contract) {
+    const { toWei } = _web3.utils;
+    await _contract.methods.withdrawEther(toWei(amount)).send({from: account});
+    _dispatch(etherWithdrawn({amount}));
+    _dispatch(refreshBalances({account}))
+  }
+}
+
+export const depositSprouts = async ({amount, account}) => {
+  if (_contract) {
+    const {toWei} = _web3.utils;
+    await _contract.methods.depositSprouts(_sprout.options.address, toWei(amount)).send({ from: account});
+    _dispatch(sproutsDeposited({amount}));
+    _dispatch(refreshBalances({account}));
+  }
+}
+
+export const withdrawSprouts = async ({amount, account}) => {
+  if (_contract) {
+    const { toWei } = _web3.utils;
+    await _contract.methods.withdrawSprouts(_sprout.options.address, toWei(amount)).send({from: account});
+    _dispatch(sproutsWithdrawn({amount}));
+    _dispatch(refreshBalances({account}))
   }
 }
 

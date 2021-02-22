@@ -4,7 +4,7 @@ import {
   createEntityAdapter
 } from '@reduxjs/toolkit';
 
-import { fetchAllOrders } from '../api/exchange.service';
+import { fetchAllOrders } from '../api/exchange.api';
 import {createSelector} from "reselect";
 
 export const ORDER_SLICE_KEY = 'orders';

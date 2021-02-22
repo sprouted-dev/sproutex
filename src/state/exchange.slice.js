@@ -12,8 +12,8 @@ export const exchangeSlice = createSlice({
   initialState,
   reducers: {
     exchangeContractLoaded: (state, action) => {
-      const {loaded} = action.payload;
-      return {...state, loaded}
+      const {loaded, address} = action.payload;
+      return {...state, loaded, address}
     },
     exchangeContractFailed: (state, action) => {
       const {error} = action.payload;
@@ -42,3 +42,8 @@ export const selectExchangeError = createSelector(
     selectExchangeState,
     state => state.error
 );
+
+export const selectExchangeAddress = createSelector(
+  selectExchangeState,
+  state => state.address
+)

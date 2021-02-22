@@ -1,6 +1,6 @@
 import Sprout from '../abis/Sprout.json';
 import { sproutContractLoaded } from "../state/sprout.slice";
-import { sproutBalanceLoaded } from "../balance/balances.slice";
+import {depositSprouts, sproutBalanceLoaded} from "../balance/balances.slice";
 
 let _contract;
 let _web3;
@@ -27,5 +27,13 @@ export const getSproutBalanceForAccount = async (account) => {
   if (_web3 && account) {
     const sproutBalance = await _contract.methods.balanceOf(account).call();
     _dispatch(sproutBalanceLoaded({sproutBalance}));
+  }
+}
+
+export const approve = async ({amount, authorizeAccount, accountOwner}) => {
+  if (_contract) {
+    const { toWei } = _web3.utils;
+    await _contract.methods.approve(authorizeAccount, toWei(amount)).send({from: accountOwner});
+    _dispatch(depositSprouts({amount, account: accountOwner}))
   }
 }

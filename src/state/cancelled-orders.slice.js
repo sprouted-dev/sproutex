@@ -4,7 +4,7 @@ import {
   createEntityAdapter
 } from '@reduxjs/toolkit';
 
-import {fetchCancelledOrders as fetchOrders, cancelOrder as cancelExchangeOrder} from '../api/exchange.service';
+import {fetchCancelledOrders as fetchOrders, cancelOrder as cancelExchangeOrder} from '../api/exchange.api';
 import {createSelector} from "reselect";
 
 export const CANCELLED_ORDER_SLICE_KEY = 'cancelledOrders';
